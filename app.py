@@ -28,13 +28,16 @@ with conectar_db() as db:
 def index():
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/inventario')
 def inventario():
     db = conectar_db()
     cursor = db.execute('SELECT * FROM productos')
     filas = cursor.fetchall()
     db.close()
-  
     lista_libros = [Libro(f['id'], f['titulo'], f['autor'], f['cantidad'], f['precio']) for f in filas]
     return render_template('inventario.html', libros=lista_libros)
 
@@ -58,3 +61,4 @@ def eliminar(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
