@@ -12,17 +12,21 @@ class Libro:
         self.precio = precio
 
 def conectar_db():
-    conexion = sqlite3.connect('biblioteca.db')
+    conexion = sqlite3.connect('biblioteca.db', check_same_thread=False)
     conexion.row_factory = sqlite3.Row 
     return conexion
 
-with conectar_db() as db:
-    db.execute('''CREATE TABLE IF NOT EXISTS productos 
-               (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                titulo TEXT NOT NULL, 
-                autor TEXT NOT NULL, 
-                cantidad INTEGER NOT NULL, 
-                precio REAL NOT NULL)''')
+try:
+    with conectar_db() as db:
+        db.execute('''CREATE TABLE IF NOT EXISTS productos 
+                   (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    titulo TEXT NOT NULL, 
+                    autor TEXT NOT NULL, 
+                    cantidad INTEGER NOT NULL, 
+                    precio REAL NOT NULL)''')
+        db.commit()
+except Exception as e:
+    print(f"Error: {e}")
 
 @app.route('/')
 def index():
@@ -61,4 +65,5 @@ def eliminar(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
     
