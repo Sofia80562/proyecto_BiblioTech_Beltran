@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 class Libro:
     def __init__(self, id, titulo, autor, cantidad, precio):
@@ -13,7 +13,6 @@ class Libro:
         self.precio = precio
 
 def conectar_db():
-    # Usamos la carpeta /tmp para evitar posibles errores de permisos en Render
     db_path = os.path.join('/tmp', 'biblioteca.db')
     conexion = sqlite3.connect(db_path, check_same_thread=False)
     conexion.row_factory = sqlite3.Row 
@@ -29,7 +28,7 @@ try:
                     precio REAL NOT NULL)''')
         db.commit()
 except Exception as e:
-    print(f"Error de base de datos: {e}")
+    print(f"Error: {e}")
 
 @app.route('/')
 def index():
@@ -47,6 +46,7 @@ def inventario():
         filas = cursor.fetchall()
         db.close()
         lista_libros = [Libro(f['id'], f['titulo'], f['autor'], f['cantidad'], f['precio']) for f in filas]
+        # Cambiamos a 'inventario.html' (sin la carpeta delante, Flask la busca solo)
         return render_template('inventario.html', libros=lista_libros)
     except Exception as e:
         return f"Error al cargar inventario: {e}"
@@ -73,5 +73,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     
+
 
 
