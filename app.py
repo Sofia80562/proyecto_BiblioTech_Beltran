@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -12,7 +13,9 @@ class Libro:
         self.precio = precio
 
 def conectar_db():
-    conexion = sqlite3.connect('biblioteca.db', check_same_thread=False)
+    # Usamos la carpeta /tmp para evitar posibles errores de permisos en Render
+    db_path = os.path.join('/tmp', 'biblioteca.db')
+    conexion = sqlite3.connect(db_path, check_same_thread=False)
     conexion.row_factory = sqlite3.Row 
     return conexion
 
@@ -26,7 +29,7 @@ try:
                     precio REAL NOT NULL)''')
         db.commit()
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error de base de datos: {e}")
 
 @app.route('/')
 def index():
@@ -38,12 +41,15 @@ def about():
 
 @app.route('/inventario')
 def inventario():
-    db = conectar_db()
-    cursor = db.execute('SELECT * FROM productos')
-    filas = cursor.fetchall()
-    db.close()
-    lista_libros = [Libro(f['id'], f['titulo'], f['autor'], f['cantidad'], f['precio']) for f in filas]
-    return render_template('inventario.html', libros=lista_libros)
+    try:
+        db = conectar_db()
+        cursor = db.execute('SELECT * FROM productos')
+        filas = cursor.fetchall()
+        db.close()
+        lista_libros = [Libro(f['id'], f['titulo'], f['autor'], f['cantidad'], f['precio']) for f in filas]
+        return render_template('inventario.html', libros=lista_libros)
+    except Exception as e:
+        return f"Error al cargar inventario: {e}"
 
 @app.route('/agregar', methods=['POST'])
 def agregar():
@@ -67,4 +73,5 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     
+
 
