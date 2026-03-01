@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import os
 
-app = Flask(__name__, template_folder='templates')
+
+base_dir = os.path.abspath(os.path.dirname(__file__))
+template_dir = os.path.join(base_dir, 'templates')
+
+app = Flask(__name__, template_folder=template_dir)
 
 class Libro:
     def __init__(self, id, titulo, autor, cantidad, precio):
@@ -28,7 +32,7 @@ try:
                     precio REAL NOT NULL)''')
         db.commit()
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"Error DB: {e}")
 
 @app.route('/')
 def index():
@@ -46,10 +50,9 @@ def inventario():
         filas = cursor.fetchall()
         db.close()
         lista_libros = [Libro(f['id'], f['titulo'], f['autor'], f['cantidad'], f['precio']) for f in filas]
-        # Cambiamos a 'inventario.html' (sin la carpeta delante, Flask la busca solo)
         return render_template('inventario.html', libros=lista_libros)
     except Exception as e:
-        return f"Error al cargar inventario: {e}"
+        return f"Error en {template_dir}: {e}"
 
 @app.route('/agregar', methods=['POST'])
 def agregar():
@@ -57,7 +60,6 @@ def agregar():
     autor = request.form['autor']
     cantidad = request.form['cantidad']
     precio = request.form['precio']
-    
     with conectar_db() as db:
         db.execute('INSERT INTO productos (titulo, autor, cantidad, precio) VALUES (?, ?, ?, ?)',
                    (titulo, autor, cantidad, precio))
@@ -73,6 +75,7 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     
+
 
 
 
