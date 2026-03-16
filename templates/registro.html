@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Registro de Usuario (MySQL)</h3>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('registrar_usuario') }}" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Nombre Completo:</label>
+                    <input type="text" name="nombre" class="form-control" placeholder="Ej: Maria Paz" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo Electrónico:</label>
+                    <input type="email" name="mail" class="form-control" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contraseña:</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Guardar en Base de Datos</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Usuarios en MySQL</h2>
+    <table class="table table-hover table-bordered shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>{{ u.id_usuario }}</td>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.mail }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center">
+        <a href="{{ url_for('registrar_usuario') }}" class="btn btn-primary">Registrar Nuevo</a>
+    </div>
+</div>
+{% endblock %}
