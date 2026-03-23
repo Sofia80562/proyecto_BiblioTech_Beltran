@@ -1,33 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>📦 Gestión de Inventario</h2>
+<div style="max-width: 900px; margin: 20px auto; font-family: Arial, sans-serif;">
+    <h2>📦 Gestión de Inventario - BiblioTech</h2>
 
-<form action="/agregar" method="POST" style="margin-bottom: 20px; padding: 15px; background: #f9f9f9;">
-    <input type="text" name="titulo" placeholder="Nombre del Libro" required>
-    <input type="text" name="autor" placeholder="Autor" required>
-    <input type="number" name="cantidad" placeholder="Cantidad" required>
-    <input type="number" step="0.01" name="precio" placeholder="Precio" required>
-    <button type="submit">Agregar Libro</button>
-</form>
+    <form action="{{ url_for('agregar') }}" method="POST" style="margin-bottom: 30px; padding: 20px; background: #f4f7f6; border-radius: 8px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <input type="text" name="titulo" placeholder="Título" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <input type="text" name="autor" placeholder="Autor" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <input type="number" name="cantidad" placeholder="Stock" style="padding: 8px; width: 80px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <input type="number" step="0.01" name="precio" placeholder="Precio" style="padding: 8px; width: 100px; border: 1px solid #ccc; border-radius: 4px;" required>
+        <button type="submit" style="background-color: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">+ Agregar</button>
+    </form>
 
-<table border="1" style="width:100%; border-collapse: collapse;">
-    <tr style="background-color: #eee;">
-        <th>ID</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Stock</th>
-        <th>Precio</th>
-        <th>Acción</th>
-    </tr>
-    {% for libro in libros %}
-    <tr>
-        <td>{{ libro.id }}</td>
-        <td>{{ libro.titulo }}</td>
-        <td>{{ libro.autor }}</td>
-        <td>{{ libro.cantidad }}</td>
-        <td>${{ libro.precio }}</td>
-        <td><a href="/eliminar/{{ libro.id }}" style="color:red;">Eliminar</a></td>
-    </tr>
-    {% endfor %}
-</table>
+    <table style="width:100%; border-collapse: collapse; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <thead>
+            <tr style="background-color: #2c3e50; color: white; text-align: left;">
+                <th style="padding: 12px;">ID</th>
+                <th style="padding: 12px;">Título</th>
+                <th style="padding: 12px;">Autor</th>
+                <th style="padding: 12px;">Stock</th>
+                <th style="padding: 12px;">Precio</th>
+                <th style="padding: 12px; text-align: center;">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for libro in libros %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px;">{{ libro.id }}</td>
+                <td style="padding: 12px;">{{ libro.titulo }}</td>
+                <td style="padding: 12px;">{{ libro.autor }}</td>
+                <td style="padding: 12px;">{{ libro.stock }}</td> 
+                <td style="padding: 12px;">${{ libro.precio }}</td>
+                <td style="padding: 12px; text-align: center;">
+                    <a href="{{ url_for('eliminar', id=libro.id) }}" 
+                       style="color: #e74c3c; text-decoration: none; font-weight: bold;"
+                       onclick="return confirm('¿Seguro que quieres eliminar este libro?')">
+                       ❌ Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="padding: 20px; text-align: center; color: #7f8c8d;">No hay libros registrados aún.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
