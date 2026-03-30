@@ -8,10 +8,23 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_categoria VARCHAR(100) NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS libros (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     autor VARCHAR(255) NOT NULL,
-    stock INT NOT NULL,
+    categoria VARCHAR(100), -- Texto para que coincida con el formulario
+    stock INT NOT NULL,     -- Representa la cantidad de ejemplares
     precio DECIMAL(10, 2) NOT NULL
 );
+
+INSERT INTO categorias (nombre_categoria) VALUES 
+('Terror'), 
+('Romance'), 
+('Fantasía'), 
+('Académico'), 
+('Ciencia Ficción');

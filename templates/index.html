@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Bienvenido a la Biblioteca Digital</h2>
-    <p>Este es el sistema de gestión de libros para el proyecto final.</p>
+<div class="welcome-container">
+    <span class="library-icon">📚</span>
+    
+    <h1 class="welcome-title">Bienvenido a BiblioTech Beltrán</h1>
+    
+    <h3 class="welcome-subtitle">Tu portal favorito para explorar y gestionar historias de todos los géneros.</h3>
+    
+    <p class="welcome-text">
+        Desde los clásicos del **Terror** y la **Fantasía** hasta los mejores títulos de **Ciencia Ficción** y **Romance**. 
+        Nuestra plataforma está diseñada para que administres tu colección personal de forma ágil, permitiéndote tener el control total de tu inventario en un solo lugar.
+    </p>
+
+    <div class="welcome-actions">
+        {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Ingresar al Sistema</a>
+            <a href="{{ url_for('registrar_usuario') }}" class="btn btn-secondary">Crear Cuenta</a>
+        {% else %}
+            <a href="{{ url_for('inventario') }}" class="btn btn-success">📦 Ver mi Colección</a>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

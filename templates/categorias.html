@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>🏷️ Géneros Literarios Disponibles</h2>
+<p>Listado único de categorías en BiblioTech Beltrán.</p>
+
+<table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%; max-width: 400px;">
+    <thead style="background-color: #f2f2f2;">
+        <tr>
+            <th>#</th>
+            <th>Género / Categoría</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cat in categorias %}
+        <tr>
+            <td>{{ loop.index }}</td> <td>{{ cat.nombre_categoria }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<a href="{{ url_for('inventario') }}">⬅ Volver al Inventario</a>
+{% endblock %}
