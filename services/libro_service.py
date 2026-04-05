@@ -115,3 +115,16 @@ def generar_reporte_pdf(libros):
     pdf_out = buffer.getvalue()
     buffer.close()
     return pdf_out
+
+def actualizar_libro(id_libro, titulo, autor, cantidad, precio, categoria):
+    db = obtener_conexion()
+    cursor = db.cursor()
+    query = """
+        UPDATE libros 
+        SET titulo = %s, autor = %s, categoria = %s, stock = %s, precio = %s 
+        WHERE id = %s
+    """
+    cursor.execute(query, (titulo, autor, categoria, cantidad, precio, id_libro))
+    db.commit()
+    cursor.close()
+    db.close()
