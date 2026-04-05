@@ -17,9 +17,20 @@ CREATE TABLE IF NOT EXISTS libros (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     autor VARCHAR(255) NOT NULL,
-    categoria VARCHAR(100), -- Texto para que coincida con el formulario
-    stock INT NOT NULL,     -- Representa la cantidad de ejemplares
+    categoria VARCHAR(100),
+    stock INT NOT NULL DEFAULT 0,
     precio DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS prestamos (
+    id_prestamo INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_libro INT NOT NULL,
+    fecha_salida DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_devolucion_esperada DATE,
+    estado ENUM('Activo', 'Devuelto', 'Vencido') DEFAULT 'Activo',
+    CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    CONSTRAINT fk_libro FOREIGN KEY (id_libro) REFERENCES libros(id) ON DELETE CASCADE
 );
 
 INSERT INTO categorias (nombre_categoria) VALUES 
@@ -27,4 +38,8 @@ INSERT INTO categorias (nombre_categoria) VALUES
 ('Romance'), 
 ('Fantasía'), 
 ('Académico'), 
-('Ciencia Ficción');
+('Ciencia Ficción'),
+('Suspenso');
+
+INSERT INTO usuarios (nombre, email, password) VALUES 
+('Administrador', 'admin@bibliotech.com', 'scrypt:32768:8:1$uY6m...ejemplo_hash');
